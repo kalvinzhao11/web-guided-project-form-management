@@ -36,12 +36,12 @@ export default function App() {
 
   // 🔥 STEP 1 - WE NEED STATE TO HOLD ALL VALUES OF THE FORM!
   // const formValues = {} // fix this using the state hook
-  const {formValues, setFormsValue} = useState(initialFormValues)
+  const [formValues, setFormsValue] = useState(initialFormValues)
 
   const updateForm = (inputName, inputValue) => {
     // 🔥 STEP 2 - IMPLEMENT a "form state updater" which will be used inside the inputs' `onChange` handler
     //  It takes in the name of an input and its value, and updates `formValues`
-    setFormsVal({...initialFormValues, [inputName] : inputValue})
+    setFormsValue({...formValues, [inputName] : inputValue})
   }
 
   const submitForm = () => {
@@ -49,13 +49,16 @@ export default function App() {
     //  a) make a new friend object, trimming whitespace from username and email
     const friend = { 
       // id: uuid() // its the backend that take cares of unique ID
-      username: formValues.username().trim,
-      email: formValues.email().trim(),
+      username: formValues.username.trim(),
+      email: formValues.email.trim(),
       role: formValues.role,
     }
     //  b) prevent further action if either username or email or role is empty string after trimming
+    console.log('hi')
+
     if (!friend.username || !friend.email) return 
     //  c) POST new friend to backend, and on success update the list of friends in state with the new friend from API
+
     fakeAxiosPost('fake.com', friend)
       .then(res =>{
         setFriends([res.data, ...friends])
@@ -72,7 +75,6 @@ export default function App() {
   useEffect(() => {
     fakeAxiosGet('fakeapi.com').then(res => setFriends(res.data))
   }, [])
-
   return (
     <div className='container'>
       <header><h1>Friends App</h1></header>
